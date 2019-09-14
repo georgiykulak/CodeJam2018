@@ -1,39 +1,36 @@
 #include <stdio.h>
 
-char s[100001];
+static char s[100001];
 
-int palindrom(unsigned long strt, unsigned long fnsh)
-{
-        unsigned long i = 0;
-        unsigned long tmp = (fnsh - strt + 1) / 2;
-        
-        while ( tmp-- ) {
-                if ( s[strt + i] != s[fnsh - i] ) 
-                        return 0;
-                ++i;
-        }
+int is_not_space(char ch);
 
-        return 1;
-}
+int palindrom(unsigned long strt, unsigned long fnsh);
 
 int main()
 {
-        s[100000] = '\0';
-        unsigned long last = 0, start, finish, counter = 1;
-        unsigned long ans_s = 0, ans_f;
-        //for ( int i = 0; s[i]; ++i) s[i] = '\0';
-        //char* ptr = s; while ( *ptr++ = '\0' ) ;
-
-        scanf("%s", s);
+        unsigned long start;
+        unsigned long finish;
+        unsigned long counter    = 0;
+        unsigned long ch_counter = 0;
+        unsigned long ans_s;
+        unsigned long ans_f;
+        char c;
         
-        while ( s[last] >= 'a' && s[last++] <= 'z' ) ;
-        start = last / 2 - 1;
-        finish = start + 1;
-        ans_f = last - 1;
+        while ( is_not_space (
+                        *(s + ch_counter++) = getchar() 
+                        ) 
+                ) 
+        ;
+        
+        *(s + ch_counter) = '\0';
+        start = ch_counter / 2 - 1;
+        ans_s = start;
+        finish = (ch_counter - 1) % 2 ? start + 1 : start;
+        ans_f = finish;
 
-        while ( finish != last ) {
+        while ( start != 0 && finish != ch_counter - 1 )  {
                 if ( !palindrom(start, finish) ) {
-                        ans_s = start; 
+                        ans_s = start;
                         ans_f = finish;
                 }
                 if ( counter % 2 ) {
@@ -43,11 +40,39 @@ int main()
                 ++counter;
         }
         
-        for ( unsigned long i = ans_s; i <= ans_f; ++i ) {
-                printf("%c", s[i]);
+        if ( (ch_counter % 2 && ans_s == ans_f) ||
+                ( !(ch_counter % 2) && ans_s == ans_f + 1 )
+           ) {
+                printf("ALarm! Short circuit!");
         }
+        else
+                for ( unsigned long i = ans_s; i <= ans_f; ++i ) {
+                        printf("%c", *(s + i) );
+                }
 
         printf("\n");
         
         return 0;
+}
+
+int is_not_space(char ch)
+{
+        return ch != '\0' &&
+                ch != '\n' &&
+                ch != ' ' &&
+                ch != '\t';
+}
+
+int palindrom(unsigned long strt, unsigned long fnsh)
+{
+        unsigned long i = 0;
+        unsigned long tmp = (fnsh - strt + 1) / 2;
+        
+        while ( tmp-- ) {
+                if ( *(s + strt - i) != *(s + fnsh + i) ) 
+                        return 0;
+                ++i;
+        }
+
+        return 1;
 }
