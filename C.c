@@ -22,6 +22,8 @@ int main()
                 ) 
         ;
         
+        printf("%d\n", palindrom(0, ch_counter) );
+
         *(s + ch_counter) = '\0';
         start = ch_counter / 2 - 1;
         ans_s = start;
@@ -66,10 +68,10 @@ int is_not_space(char ch)
 int palindrom(unsigned long strt, unsigned long fnsh)
 {
         unsigned long i = 0;
-        unsigned long tmp = (fnsh - strt + 1) / 2;
+        unsigned long tmp = (fnsh - strt) / 2 + 1;
         
         while ( tmp-- ) {
-                if ( *(s + strt - i) != *(s + fnsh + i) ) 
+                if ( *(s + strt + i) != *(s + fnsh - i) ) 
                         return 0;
                 ++i;
         }
