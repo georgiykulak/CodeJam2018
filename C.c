@@ -8,12 +8,7 @@ int palindrom(unsigned long strt, unsigned long fnsh);
 
 int main()
 {
-        unsigned long start;
-        unsigned long finish;
-        unsigned long counter    = 0;
         unsigned long ch_counter = 0;
-        unsigned long ans_s;
-        unsigned long ans_f;
         char c;
         
         while ( is_not_space (
@@ -21,36 +16,34 @@ int main()
                         ) 
                 ) 
         ;
-        
-        printf("%d\n", palindrom(0, ch_counter) );
 
         *(s + ch_counter) = '\0';
-        start = ch_counter / 2 - 1;
-        ans_s = start;
-        finish = (ch_counter - 1) % 2 ? start + 1 : start;
-        ans_f = finish;
+        unsigned long size = ch_counter - 1;
+        
+        if ( palindrom(0, size) || ch_counter == 2) {
+                printf("%s\n", s);
+                return 0;
+        }
 
-        while ( start != 0 && finish != ch_counter - 1 )  {
-                if ( !palindrom(start, finish) ) {
-                        ans_s = start;
-                        ans_f = finish;
-                }
-                if ( counter % 2 ) {
-                        --start;
-                }
-                else ++finish;
-                ++counter;
+        unsigned long start = 0;
+        unsigned long finish = 0;
+        
+        //maybe I should use reversed iterations on string
+        //to get "abb" and not "bba"
+        for ( unsigned long k = 2; k < size; ++k ) {
+                unsigned long tempsize = size - k;
+                for ( unsigned long i = 0; i <= tempsize; ++i )
+                        if ( palindrom(i, i + k) ) {
+                                start = i;
+                                finish = i + k;
+                        }
         }
         
-        if ( (ch_counter % 2 && ans_s == ans_f) ||
-                ( !(ch_counter % 2) && ans_s == ans_f + 1 )
-           ) {
-                printf("ALarm! Short circuit!");
-        }
-        else
-                for ( unsigned long i = ans_s; i <= ans_f; ++i ) {
+        if ( ! finish )
+                printf("Alarm! Short circuit!");
+        else 
+                for ( int i = start; i < finish; ++i )
                         printf("%c", *(s + i) );
-                }
 
         printf("\n");
         
@@ -70,11 +63,9 @@ int palindrom(unsigned long strt, unsigned long fnsh)
         unsigned long i = 0;
         unsigned long tmp = (fnsh - strt) / 2 + 1;
         
-        while ( tmp-- ) {
-                if ( *(s + strt + i) != *(s + fnsh - i) ) 
-                        return 0;
-                ++i;
-        }
-
-        return 1;
+        while ( tmp-- )
+                if ( *(s + strt + i) != *(s + fnsh - i++ - 1) ) 
+                        return 1;
+        
+        return 0;
 }
