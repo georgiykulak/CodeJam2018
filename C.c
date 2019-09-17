@@ -21,24 +21,34 @@ int main()
         unsigned long size = ch_counter - 1;
         
         if ( palindrom(0, size) || ch_counter == 2) {
-                printf("%s\n", s);
+                printf("%s", s);
                 return 0;
         }
 
         unsigned long start = 0;
         unsigned long finish = 0;
         
-        //maybe I should use reversed iterations on string
-        //to get "abb" and not "bba"
-        for ( unsigned long k = 2; k < size; ++k ) {
+        /*for ( unsigned long k = 2; k < size; ++k ) {
                 unsigned long tempsize = size - k;
                 for ( unsigned long i = 0; i <= tempsize; ++i )
                         if ( palindrom(i, i + k) ) {
                                 start = i;
                                 finish = i + k;
                         }
-        }
+        }*/
         
+        for ( unsigned long k = 2; k < size; ++k ) {
+                unsigned long tempsize = k - 2;
+                for ( int i = size - 1; i > tempsize; --i )
+                        if ( palindrom(i - k + 1, i + 1) ) {
+                                start = i - k + 1;
+                                finish = i + 1;
+                        }
+        }
+       
+        //I don't know what loop is faster
+        //so I leave both (first try in comments)
+
         if ( ! finish )
                 printf("Alarm! Short circuit!");
         else 
