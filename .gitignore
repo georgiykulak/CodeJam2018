@@ -1,1 +1,6 @@
 *.out
+*.[oa]
+*.md
+*.jpg
+*.jpeg
+*.png
